@@ -1,0 +1,153 @@
+<div class="card">
+  <div class="card-header d-flex justify-content-between">
+    <h4>Daily Task</h4>
+    <button class="btn btn-secondary " (click)="Logout()">Logout</button>
+  </div>
+  <div class="card-body m-5">
+    <form [formGroup]="taskForm" class="form-group">
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <label for="name" class="form-label"> Name : </label>
+            <input type="text" class="form-control" placeholder="Name" formControlName="name">
+          </div>
+        </div>
+        <div class="col-8">
+          <div class="row">
+
+            <div class="col-6">
+              <label class="form-label">Priority</label>
+              <select formControlName="priority" class="form-select">
+                @for(data of priorityList;track data ){
+                <option [value]="data.value">{{data.text}}</option>
+                }
+
+
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Status</label>
+              <select formControlName="status" class="form-select">
+                @for(data of statusList;track data ){
+                <option [value]="data.value">{{data.text}}</option>
+                }
+
+
+              </select>
+            </div>
+
+            <div class="col-6">
+              <label class="form-label">Start Date :</label>
+              <div class="row row-cols-sm-auto">
+                <div class="col-12">
+                  <div class="input-group">
+                    <input  class="form-control"   ngbDatepicker  placeholder="dd/mm/yyyy" name="d2" formControlName="startDate"
+                      ngbDatepicker #d2="ngbDatepicker" />
+                    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d2.toggle()" type="button">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-date" viewBox="0 0 16 16">
+                        <path d="M6.445 11.688V6.354h-.633A13 13 0 0 0 4.5 7.16v.695c.375-.257.969-.62 1.258-.777h.012v4.61zm1.188-1.305c.047.64.594 1.406 1.703 1.406 1.258 0 2-1.066 2-2.871 0-1.934-.781-2.668-1.953-2.668-.926 0-1.797.672-1.797 1.809 0 1.16.824 1.77 1.676 1.77.746 0 1.23-.376 1.383-.79h.027c-.004 1.316-.461 2.164-1.305 2.164-.664 0-1.008-.45-1.05-.82zm2.953-2.317c0 .696-.559 1.18-1.184 1.18-.601 0-1.144-.383-1.144-1.2 0-.823.582-1.21 1.168-1.21.633 0 1.16.398 1.16 1.23"/>
+                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+                      </svg></button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Due Date :</label>
+              <div class="row row-cols-sm-auto">
+                <div class="col-12">
+                  <div class="input-group">
+                    <input class="form-control" placeholder="dd/mm/yyyy" name="d1" formControlName="dueDate"
+                      ngbDatepicker #d1="ngbDatepicker" />
+                    <button class="btn btn-outline-secondary bi bi-calendar" (click)="d1.toggle()"
+                      type="button">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-date" viewBox="0 0 16 16">
+                        <path d="M6.445 11.688V6.354h-.633A13 13 0 0 0 4.5 7.16v.695c.375-.257.969-.62 1.258-.777h.012v4.61zm1.188-1.305c.047.64.594 1.406 1.703 1.406 1.258 0 2-1.066 2-2.871 0-1.934-.781-2.668-1.953-2.668-.926 0-1.797.672-1.797 1.809 0 1.16.824 1.77 1.676 1.77.746 0 1.23-.376 1.383-.79h.027c-.004 1.316-.461 2.164-1.305 2.164-.664 0-1.008-.45-1.05-.82zm2.953-2.317c0 .696-.559 1.18-1.184 1.18-.601 0-1.144-.383-1.144-1.2 0-.823.582-1.21 1.168-1.21.633 0 1.16.398 1.16 1.23"/>
+                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <i class="bi bi-calendar"></i>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="form-group">
+            <label for="priority" class="form-label">Description : </label>
+            <textarea type="text" class="form-control" placeholder="desription" formControlName="description">
+        </textarea>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex mt-2 justify-content-end">
+        <input [disabled]="taskForm.invalid" type="submit" class="btn btn-info" value="Submit" (click)="onSubmit()">
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+<div class="mat-elevation-z8 m-2" >
+  <div class="dataTables_filter">
+    <label>
+      <input [(ngModel)]="searchDataValue" [ngModelOptions]="{standalone: true}"
+        [ngModelOptions]="{standalone: true}" (ngModelChange)="searchData(searchDataValue)" type="search"
+        class="form-control" placeholder="Search ..."
+       
+        />
+    </label>
+  </div>
+  <div  style="height: 300px;overflow-y: auto;" >
+  <table mat-table [dataSource]="dataSource" >
+
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="priority">
+      <th mat-header-cell *matHeaderCellDef> Priority </th>
+      <td mat-cell *matCellDef="let element"> {{element.priority}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="startDate">
+      <th mat-header-cell *matHeaderCellDef> Start Date </th>
+      <td mat-cell *matCellDef="let element"> {{element.startDate | date:'dd/MM/yyyy'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dueDate">
+      <th mat-header-cell *matHeaderCellDef> Due Date </th>
+      <td mat-cell *matCellDef="let element"> {{element.dueDate | date:'dd/MM/yyyy'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef class="text-center">
+       
+        <button class="btn btn-sm btn-info" (click)="add()">Reset</button>
+      </th>
+      <td class="text-center" mat-cell *matCellDef="let element">
+        <button class="btn btn-sm btn-success" (click)="edit(element)">edit</button>
+        &nbsp;&nbsp;&nbsp;
+        <button class="btn btn-sm btn-danger" (click)="delete(element.id)">delete</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+
+</div>

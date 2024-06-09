@@ -1,0 +1,51 @@
+.text-right.forget-pass a{
+    font-size: 12px;
+    color: #77746b;
+    text-decoration: none;
+  }
+  .sign-up{
+    color: #fff;
+
+  }
+  .sign-up a{
+    color: #6f6b5c;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .auth{
+    margin-top:  50%;
+   margin-bottom: 50%;
+    border-radius: 6px;
+    color: black;
+    max-width: 400px;
+  }
+
+  .div-center {
+    width: 400px;
+    height: 400px;
+    background-color: #fff;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: auto;
+    padding: 1em 2em;
+    border-bottom: 2px solid #ccc;
+    display: table;
+  }
+  .back {
+    background: #e2e2e2;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+  }
+  div.content {
+    display: table-cell;
+    vertical-align: middle;
+  }
