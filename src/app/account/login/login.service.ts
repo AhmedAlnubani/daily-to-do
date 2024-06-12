@@ -7,10 +7,17 @@ import { Observable } from "rxjs";
     providedIn:'root'
 })
 export class LoginService {
+   //#region  Properties
     baseUrl = environment.apiUrl;
+    //#endregion  Properties
+    
+  //#region  constructor
     constructor(private http : HttpClient) { }
-
+ //#endregion  constructor
+ 
+   //#region  Properties
     login(data: any) :Observable<any>{
         return this.http.post<any>('Accounts/Login', data);
     }
+     //#endregion  Properties
 }

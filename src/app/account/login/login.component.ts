@@ -9,52 +9,63 @@ import { LoginService } from './login.service';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  errMsg: any = [];
-  loginForm: FormGroup;
-  msgError: boolean = false;
-  constructor(fb: FormBuilder,
-    private loginServ: LoginService,
-    private route: Router
-  ) {
+   //#region  Properties
+    errMsg: any = [];
+    loginForm: FormGroup;
+    showMsg: boolean = false;
+    customMsg:string;
+  //#endregion Properties
 
-  }
-  ngOnInit() {
-    this.buildForm();
-  }
+   //#region  constructsor
+      constructor(fb: FormBuilder, private loginServ: LoginService,private route: Router){ }
+    //#endregion constructor
 
-  buildForm() {
-    this.loginForm = new FormGroup({
-      username: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required])
-    })
-  }
-
-  onSubmit() {
-    if (!this.loginForm.valid) {
-      this.errMsg = [];
-      if (!this.loginForm.get('username')?.valid) {
-        this.errMsg.push('required User name');
+     //#region  Functions
+      ngOnInit() {
+        this.buildForm();
       }
-      if (!this.loginForm.get('password')?.valid) {
-        this.errMsg.push('required password');
+    
+      buildForm() {
+        this.loginForm = new FormGroup({
+          username: new FormControl('', [Validators.required]),
+          password: new FormControl('', [Validators.required])
+        })
       }
-    } else {
-      this.loginServ.login({
-        "userName": this.loginForm.get('username')?.value,
-        "password": this.loginForm.get('password')?.value
-      }).subscribe((res: any) => {
-        if (res.token == 'Unothraization') {
-          this.msgError = true;
-          return
+
+      onSubmit() {
+        if (!this.loginForm.valid) {
+          this.errMsg = [];
+          if (!this.loginForm.get('username')?.valid) {
+            this.errMsg.push('required User name');
+          }
+          if (!this.loginForm.get('password')?.valid) {
+            this.errMsg.push('required password');
+          }
+          this.customMsg=this.errMsg;
+          this.showMsg = true;
+        } else {
+          //call Login Srv
+          this.loginServ.login({
+            "userName": this.loginForm.get('username')?.value,
+            "password": this.loginForm.get('password')?.value
+          }).subscribe((res: any) => {
+            if (res.token == 'Unothraization') {
+              debugger
+               this.errMsg=[];
+              this.errMsg.push('Invalid User Name Or Password');
+              this.customMsg=this.errMsg;
+              this.showMsg = true;
+              return this.errMsg;
+            }
+            sessionStorage.setItem('token', res.token);
+            this.route.navigate(['/daily-tasks']);
+
+          }, (error) => {
+            this.showMsg = true;
+            this.errMsg;
+          }
+          )
         }
-        sessionStorage.setItem('token', res.token);
-        this.route.navigate(['/daily-tasks']);
-
-      }, (error) => {
-        this.msgError = true;
-        this.errMsg;
       }
-      )
-    }
-  }
+       //#endregion Functions
 }

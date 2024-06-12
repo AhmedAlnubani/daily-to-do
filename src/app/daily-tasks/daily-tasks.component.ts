@@ -12,6 +12,7 @@ import Swal from 'sweetalert2'
   styleUrl: './daily-tasks.component.scss'
 })
 export class DailyTasksComponent {
+  //#region  Properties
   dataSource = new MatTableDataSource<any>();
   tableData: any;
   taskForm: FormGroup;
@@ -21,32 +22,32 @@ export class DailyTasksComponent {
   model1: string;
   public model2: string;
   public searchDataValue = '';
-  priorityList=[
-    {value:'Low',text:'Low'},
-    {value:'Height',text:'Height'},
-    {value:'Normal',text:'Normal'}
+  priorityList = [
+    { value: 'Low', text: 'Low' },
+    { value: 'Height', text: 'Height' },
+    { value: 'Normal', text: 'Normal' }
   ];
-  statusList=[
-    {value:'Open',text:'Open'},
-    {value:'Completed',text:'Completed'},
-    {value:'InProgress',text:'InProgress'}
+  statusList = [
+    { value: 'Open', text: 'Open' },
+    { value: 'Completed', text: 'Completed' },
+    { value: 'InProgress', text: 'InProgress' }
   ];
-  constructor(fb: FormBuilder,
-    private route: Router,
-    private serv: DailyTasksService
-  ) {
+  //#endregion  Properties
 
-  }
+  //#region  constructor
+  constructor(fb: FormBuilder,private route: Router,private service: DailyTasksService) { }
+  //#endregion  constructor
+  
+  //#region  Functions
   ngOnInit() {
     this.buildForm();
     this.getAllTasks();
   }
-  Logout(){
+  Logout() {
     this.route.navigate(['/login']);
-
   }
   getAllTasks() {
-    this.serv.getAll().subscribe((res: any) => {
+    this.service.getAll().subscribe((res: any) => {
       setTimeout(() => {
         this.tableData = res;
         this.dataSource = new MatTableDataSource(this.tableData);
@@ -55,7 +56,7 @@ export class DailyTasksComponent {
     })
   }
 
-  add() {
+  reset() {
     this.dataForm = [];
     this.taskForm.reset();
     this.buildForm()
@@ -66,22 +67,22 @@ export class DailyTasksComponent {
     this.buildForm();
   }
 
-  delete(id:any){
+  delete(id: any) {
     Swal.fire({
       title: "Do you want to delete task?",
       showDenyButton: false,
       showCancelButton: true,
       confirmButtonText: "confirm",
-      
+
     }).then((result) => {
 
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        this.serv.delete(id).subscribe((res:any)=>{
-         this.tableData = this.tableData.filter((it:any)=> it.id != id);
+        this.service.delete(id).subscribe((res: any) => {
+          this.tableData = this.tableData.filter((it: any) => it.id != id);
           this.dataSource = new MatTableDataSource(this.tableData);
         })
-        
+
       }
     });
   }
@@ -121,7 +122,7 @@ export class DailyTasksComponent {
 
     if (data?.id) {
 
-      let xxx = this.serv.update(objData).subscribe((res: any) => {
+      let result = this.service.update(objData).subscribe((res: any) => {
         this.tableData.map((it: any) => {
           if (it.id === res.id) {
             it.dueDate = res.dueDate
@@ -137,17 +138,19 @@ export class DailyTasksComponent {
       });
     }
     else {
-      this.serv.add(objData).subscribe((res: any) => {
+      this.service.add(objData).subscribe((res: any) => {
         this.taskForm.reset()
         this.dataForm = []
         this.tableData.push(res);
         this.dataSource = new MatTableDataSource(this.tableData);
       });
     }
-    
+
   }
   public searchData(value: string): void {
     this.dataSource.filter = value.trim().toLowerCase();
     this.tableData = this.dataSource.filteredData;
   }
+
+  //#endregion  Functions
 }

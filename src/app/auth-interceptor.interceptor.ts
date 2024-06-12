@@ -9,20 +9,17 @@ import { environment } from 'src/environments/environment';
   providedIn: "root",
 })
 export class AuthInterceptor implements HttpInterceptor {
+  //#region  constructor
   constructor() { }
+  //#endregion  constructor
 
+  //#region  Functions
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let apiUrl = request.url;
-    if (
-      apiUrl.toLowerCase().indexOf('https://jsonplaceholder.typicode') < 0 &&
-      apiUrl.toLowerCase().indexOf('.json') < 0 && !apiUrl.includes('maps.googleapis.com')) {
-      if (apiUrl.indexOf('Hubs') == -1 && apiUrl.indexOf('https') == -1)
-        apiUrl = `${environment.apiUrl}${request.url}`;
-
-    }
-    else {
+    if (apiUrl.toLowerCase().indexOf('.json') < 0)
+      apiUrl = `${environment.apiUrl}${request.url}`
+    else
       return next.handle(request);
-    }
 
     request = request.clone({
       url: apiUrl,
@@ -47,29 +44,26 @@ export class AuthInterceptor implements HttpInterceptor {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "GET,POST,OPTIONS,DELETE,PUT",
           'Cache-Control': 'no-store, no-cache, must-revalidate',
-        
           "Expires": "0"
         },
       });
     }
 
 
-    return next.handle(request)
-      .pipe(
-      //   catchError((err:any | null) => {
-      //   if ([401, 403].includes(err.status)) {//400
-      //     sessionStorage.removeItem('token');
-      //     sessionStorage.removeItem('permissions');
-      //     sessionStorage.removeItem('adminLogin');
-      //     window.location.href = ('auth/login');
-      //   }
-      //   else {
-      //     const error = err.error;
-      //     alert('Unknown Error')
-      //     return throwError(error);
-      //   }
-      // })
-    );
+    return next.handle(request).pipe(
+        catchError((err) => {
+          if ([401, 403].includes(err.status)) {
+            sessionStorage.removeItem('token');
+            window.location.href = ('login');
+            return throwError(err);
+          }
+          else {
+            const error = err.error;
+            alert('Unknown Error')
+            return throwError(error);
+          }
+        })
+      );
   }
-
+  //#endregion  Functions
 }

@@ -4,22 +4,25 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 
 @Injectable({
-    providedIn:'root'
+    providedIn: 'root'
 })
 export class DailyTasksService {
-    constructor(private http : HttpClient) { }
+    //#region  constructor
+    constructor(private http: HttpClient) { }
+    //#endregion  constructor
 
-    getAll() :Observable<any>{
+    //#region  Functions
+    getAll(): Observable<any> {
         return this.http.get<any>('Task/GetAllTaskes', {});
     }
-    update(data:any) :Observable<any>{
+    update(data: any): Observable<any> {
         return this.http.put<any>('Task/UpdateTask', data);
     }
-    add(data:any) :Observable<any>{
+    add(data: any): Observable<any> {
         return this.http.post<any>('Task/AddTask', data);
     }
-
-    delete(id:any) :Observable<any>{
-        return this.http.delete<any>('Task/'+id);
+    delete(id: any): Observable<any> {
+        return this.http.delete<any>('Task/' + id);
     }
+    //#endregion  Functions
 }

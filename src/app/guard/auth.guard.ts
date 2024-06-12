@@ -6,7 +6,11 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthGuard {
-  constructor(private router: Router) {}
+  //#region  constructor
+  constructor(private router: Router) { }
+  //#endregion  constructor
+
+  //#region  Functions
   canActivate():
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
@@ -20,4 +24,5 @@ export class AuthGuard {
       return false;
     }
   }
+  //#endregion  Functions
 }
