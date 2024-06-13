@@ -49,6 +49,7 @@ export class DailyTasksComponent {
   getAllTasks() {
     this.service.getAll().subscribe((res: any) => {
       setTimeout(() => {
+        debugger
         this.tableData = res;
         this.dataSource = new MatTableDataSource(this.tableData);
       }, 0);
@@ -91,8 +92,8 @@ export class DailyTasksComponent {
     var startDate = new Date(this.dataForm?.startDate);
     var dueDate = new Date(this.dataForm?.dueDate);
 
-    var sday = new NgbDate(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
-    var dday = new NgbDate(dueDate.getFullYear(), dueDate.getMonth(), dueDate.getDate());
+    var sday = new NgbDate(startDate.getFullYear(), startDate.getMonth() + 1 , startDate.getDate());
+    var dday = new NgbDate(dueDate.getFullYear(), dueDate.getMonth() + 1 , dueDate.getDate());
 
 
     this.taskForm = new FormGroup({
@@ -107,41 +108,50 @@ export class DailyTasksComponent {
   }
 
   onSubmit() {
-    let data = this.taskForm.value
-    let startDate = new Date(data?.startDate['year'] + '-' + data?.startDate['month'] + '-' + data?.startDate['day'])
-    let dueDate = new Date(data?.dueDate['year'] + '-' + data?.dueDate['month'] + '-' + data?.dueDate['day'])
+    
+    //let data = this.taskForm.value
+   
+    let startDate = new Date(this.taskForm.value?.startDate['year'] + '-' + this.taskForm.value?.startDate['month'] + '-' + this.taskForm.value?.startDate['day']);
+    let dueDate = new Date( this.taskForm.value?.dueDate['year'] + '-' + this.taskForm.value?.dueDate['month'] +'-' +this.taskForm.value?.dueDate['day']);
+    
+     startDate.setDate(startDate.getDate() + 1);
+     dueDate.setDate(dueDate.getDate() + 1);
+    
     const objData = {
-      id: data?.id,
-      name: data?.name,
-      priority: data?.priority,
-      status: data?.status,
-      description: data?.description,
+      id: this.taskForm.value?.id,
+      name: this.taskForm.value?.name,
+      priority: this.taskForm.value?.priority,
+      status: this.taskForm.value?.status,
+      description: this.taskForm.value?.description,
       startDate: startDate,
       dueDate: dueDate
     }
 
-    if (data?.id) {
-
-      let result = this.service.update(objData).subscribe((res: any) => {
+    if (this.taskForm.value?.id) {
+      let rus = this.service.update(objData).subscribe((res: any) => {
         this.tableData.map((it: any) => {
           if (it.id === res.id) {
-            it.dueDate = res.dueDate
+            it.dueDate = res.dueDate.replace('Z','')
             it.id = res.id
             it.name = res.name
             it.priority = res.priority;
-            it.startDate = res.startDate;
+            it.startDate = res.startDate.replace('Z','');
             it.status = res.status;
             it.description = res.description
           }
         })
+        alert('Success')
         this.dataSource = new MatTableDataSource(this.tableData);
       });
     }
     else {
-      this.service.add(objData).subscribe((res: any) => {
+      this.service.add(objData).subscribe((res: any) => {debugger
         this.taskForm.reset()
         this.dataForm = []
+        res.startDate = res.startDate.replace('Z','');
+        res.dueDate = res.dueDate.replace('Z','');
         this.tableData.push(res);
+        alert('Success')
         this.dataSource = new MatTableDataSource(this.tableData);
       });
     }
